@@ -1,0 +1,243 @@
+{
+  "Settings": {
+    "forceAlgorithm":       "",
+    "defaultAlgorithm":     "TRL",
+    "GRLFolderKeyword":     "UOB",
+    "C0":             	    299792458
+  },
+
+  "Units": {
+    "ThicknessUnit": 	    "mm",
+    "RoughnessUnit": 	    "um"
+  },
+
+  "FilePatterns": {
+    "rootDir":              "Merged",
+    "MergedDirectory":      "Merged",
+    "MergedFilePattern":    "*Merged_Data.csv",
+    "OutputFileSuffix":     "_Roughness",
+    "OutputFileSuffix1":    "_withoutRoughness",
+    "OutputFileSuffixS2P":  "_RoughnessS2P",
+    "OutputFileSuffix1S2P": "_withoutRoughnessS2P"
+  },
+
+  "Optimization": {
+    "Solver":      	        "fmincon",
+    "TolFun":      	        1e-17,
+    "TolX":        	        1e-17,
+    "BoundFactor": 	        0.1,
+    
+    "SpecialBandBounds": {
+      "Enable":             true,
+      "BandNames":          ["WR15", "WR10"],
+      "TanScaleFactor":     3.0,
+      "TanMinAbs":          1e-4
+    }
+  },
+
+  "Debug": {
+    "EnablePlotting":       true,
+    "CompareAlgorithms":    false,
+    "CompareCSVvsS2P":      false,
+    "PauseDuration":        0.1,
+    "EnableRoughness":      true,
+    "SaveWithRoughness":    true,
+    "SaveWithoutRoughness": true
+  },
+
+  "DataLayoutCSV": {
+    "BlockSize":            4,
+    "Columns": {
+      "Frequency":          1,
+      "Epsilon":            2,
+      "TanDelta":           3,
+      "Thickness":          4
+    }
+  },
+  
+  "DataLayoutS2PCSV": {
+    "BlockSize":            9
+  },
+  
+    "Materials":
+    [
+        {"Name": "ROGERS_TMM3",              	"Thickness": 3.1516, 	"Roughness": 0.382},
+        {"Name": "ROGERS_RT6002",            	"Thickness": 3.0707, 	"Roughness": 0.613},
+        {"Name": "ROGERS_RT5880LZ",         	"Thickness": 3.1334, 	"Roughness": 0.586},
+        {"Name": "ROGERS_RT5880RIC6",        	"Thickness": 3.1470, 	"Roughness": 0.548},
+        {"Name": "ROGERS_RO3003",               "Thickness": 1.5039, 	"Roughness": 0.388},
+        {"Name": "RADIX_2.8_6",             	"Thickness": 3.0460, 	"Roughness": 1.097},
+        {"Name": "RADIX_2.8_7_CANCELLED",   	"Thickness": 2.9558, 	"Roughness": 1.063},
+        {"Name": "RADIX_2.8_HT",             	"Thickness": 2.9797, 	"Roughness": 2.352},
+        {"Name": "RADIX_2.8_HT_Zprint_14",   	"Thickness": 3.0477, 	"Roughness": 2.151},
+        {"Name": "RADIX_2.8_HT_Zprint_15",   	"Thickness": 3.0210, 	"Roughness": 2.151},
+        {"Name": "RADIX_4.6",          		    "Thickness": 3.1340, 	"Roughness": 1.661}
+    ],
+    
+    "MergedProcessing":{
+      "Output": {
+        "MergedSubFolder":              "Merged",
+        "PermittivityMergedSuffix":     "_Merged_Data.csv",
+        "PermittivityAveragedSuffix":   "_Averaged_Data.csv",
+        "S2PMergedSuffix":              "_S2PMerged.csv",
+        "S2PAveragedSuffix":            "_S2PAveraged_Data.csv",
+        "PermittivityMergedHeaders": [
+          "Freq_Hz",
+          "EpsReal",
+          "TanDelta",
+          "Thickness_mm"
+        ],
+        "PermittivityAveragedHeaders": [
+          "Freq_Hz",
+          "EpsReal_Mean",
+          "EpsReal_STD",
+          "TanDelta_Mean",
+          "TanDelta_STD",
+          "Thickness_mm"
+        ],
+        "S2PHeaders": [
+          "Freq_Hz",
+          "S11_mag",
+          "S11_phase",
+          "S21_mag",
+          "S21_phase",
+          "S12_mag",
+          "S12_phase",
+          "S22_mag",
+          "S22_phase"
+        ]
+      },
+      
+      
+      "Methods": [
+        {
+          "Name":               "UoB",
+          "FolderName":         "Keysight_PNA_UoB",
+          "Bands": [
+            {
+              "Name": "220-330",
+              "LowerCutoffHz": 220E9,
+              "UpperCutoffHz": 325E9
+            },
+            {
+              "Name": "325-500",
+              "LowerCutoffHz": 325E9,
+              "UpperCutoffHz": 500E9
+            },
+            {
+              "Name": "500-750",
+              "LowerCutoffHz": 500E9,
+              "UpperCutoffHz": 750E9
+            },
+            {
+              "Name": "MergedBands",
+              "LowerCutoffHz": 0,
+              "UpperCutoffHz": 2E12
+            }
+          ],
+
+          "PermittivityInput": {
+            "Extensions":       [".csv"],
+            "HeaderRowsToSkip": 13,
+            "FrequencyColumn":  1,
+            "EpsRealColumn":    2,
+            "TanColumn":        3,
+            "TanDelta_EpsImag": "EpsImag",
+            "Thickness": {
+              "Mode":           "Cell",
+              "Row":            9,
+              "Col":            2,
+              "RemoveString":   " mm",
+              "Unit":           "mm"
+            },
+            "FreqUnit":         "Hz",
+            "ApplyBandCutoff":  true
+          },
+          
+          "SParameterInput": {
+            "Extensions":       [".s2p"],
+            "HeaderRowsToSkip": 0,
+            "FreqUnit":         "Hz",
+            "UseFilenameLastNumberAsOrder": true,
+            "ApplyBandCutoff": true,
+            "Columns": {
+              "Frequency":      1,
+              "S11_mag":        2,
+              "S11_phase":      3,
+              "S21_mag":        4,
+              "S21_phase":      5,
+              "S12_mag":        6,
+              "S12_phase":      7,
+              "S22_mag":        8,
+              "S22_phase":      9
+            }
+          }
+        },
+        {
+          "Name":               "NPL",
+          "FolderName":         "Keysight_PNA_NPL",
+          "Bands": [
+            {
+              "Name": "WR15",
+              "LowerCutoffHz": 50E9,
+              "UpperCutoffHz": 75E9
+            },
+            {
+              "Name": "WR10",
+              "LowerCutoffHz": 75E9,
+              "UpperCutoffHz": 110E9
+            },
+            {
+              "Name": "WR5",
+              "LowerCutoffHz": 140E9,
+              "UpperCutoffHz": 220E9
+            },
+            {
+              "Name": "MergedBands",
+              "LowerCutoffHz": 0,
+              "UpperCutoffHz": 2E12
+            },
+            {
+              "Name": "WM-380",
+              "LowerCutoffHz": 500E9,
+              "UpperCutoffHz": 750E9
+            }
+          ],
+          "PermittivityInput": {
+            "Extensions":       [".txt"],
+            "TanDelta_EpsImag": "TanDelta",
+            "HeaderRowsToSkip": 1,
+            "FrequencyColumn":  1,
+            "EpsRealColumn":    2,
+            "TanColumn":        5,
+            "Thickness": {
+              "Mode":           "Constant",
+              "Value":          NaN,
+              "Unit":           "mm"
+            },
+            "FreqUnit":         "GHz",
+            "ApplyBandCutoff":  true
+          },
+          "SParameterInput": {
+            "Extensions":       [".s2p"],
+            "HeaderRowsToSkip": 0,
+            "FreqUnit":         "Hz",
+            "DataFormat":       "RI",
+            "UseFilenameLastNumberAsOrder": true,
+            "ApplyBandCutoff":  true,
+            "Columns": {
+              "Frequency":      1,
+              "S11_mag":        2,
+              "S11_phase":      3,
+              "S21_mag":        4,
+              "S21_phase":      5,
+              "S12_mag":        6,
+              "S12_phase":      7,
+              "S22_mag":        8,
+              "S22_phase":      9
+            }
+          }
+        }
+      ]
+    }
+  }

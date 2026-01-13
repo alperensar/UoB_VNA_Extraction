@@ -1,0 +1,21 @@
+git checkout main
+git add .
+git commit -m "IEEE_APS_update"
+
+
+# 1. Eski branch'i sil ve sıfır sayfa (orphan) aç
+git branch -D public_IEEE_THz
+git checkout --orphan public_IEEE_THz
+git rm -rf .
+git checkout main -- .
+git reset HEAD filter_processing_others
+rm -rf filter_processing_others
+
+if [ -f "README_PUBLIC.md" ]; then
+    cat README_PUBLIC.md > README.md
+    rm README_PUBLIC.md
+fi
+git add .
+git commit -m "IEEE_APS_update (Public Release)"
+git push public public_IEEE_THz:main --force
+git checkout main
