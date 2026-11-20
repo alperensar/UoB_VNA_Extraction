@@ -1,14 +1,20 @@
-function runAllMaterials()
+function runAllMaterials(configPath)
 % This function reads config_VNA.json and decides which file formats and algorithm
 % should be processed for each material folder.
 
-    configPath = 'config_VNA.json';
+    if nargin < 1 || isempty(configPath)
+        configPath = fullfile(fileparts(mfilename('fullpath')), 'config_VNA.json');
+    end
     if ~isfile(configPath)
-        error('Could not find config file: %s', configPath);
+        error('VNA:ConfigurationNotFound', 'Could not find config file: %s', configPath);
     end
 
     text   = fileread(configPath);
     config = jsondecode(text);
+    if exist('fmincon', 'file') ~= 2 || ~license('test', 'Optimization_Toolbox')
+        error('VNA:MissingOptimizationToolbox', ...
+            'Optimization Toolbox is required for parameter extraction with fmincon.');
+    end
 
     msg = "This function calculates permittivity and loss tangent for VNA measurements:" + newline + newline + ...
           "• either using GRL (Generalized Reflection Line)"  + newline + newline + ...

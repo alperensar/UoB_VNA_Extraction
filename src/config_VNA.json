@@ -12,7 +12,7 @@
   },
 
   "FilePatterns": {
-    "rootDir":              "Merged",
+    "rootDir":              "",
     "MergedDirectory":      "Merged",
     "MergedFilePattern":    "*Merged_Data.csv",
     "OutputFileSuffix":     "_Roughness",
