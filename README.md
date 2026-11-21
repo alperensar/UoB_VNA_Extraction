@@ -4,11 +4,11 @@
 ![Optimization Toolbox](https://img.shields.io/badge/Optimization%20Toolbox-required-0076A8)
 ![Workflow](https://img.shields.io/badge/workflow-interactive-6f42c1)
 
-**Material permittivity and loss tangent extraction from VNA measurements using an interactive MATLAB workflow.**
+MATLAB software for extracting permittivity and loss tangent from VNA measurements.
 
-**Initialisation Correction.** The entry point now resolves its configuration relative to its own location, checks that Optimization Toolbox is available, and asks for the measurement directory when none is configured. These changes address startup failures when MATLAB opens the repository from different working directories. The extraction calculations are unchanged.
+**Initialisation Correction.** Configuration discovery and the Optimization Toolbox check have been corrected. The extraction calculations are unchanged.
 
-The software was developed at the University of Birmingham. It supports generalized reflection line (GRL) and thru reflect line (TRL) workflows, CSV and Touchstone inputs, and interactive control of initial fit conditions.
+The software supports GRL and TRL workflows, CSV and Touchstone inputs, and interactive fit settings.
 
 ## Requirements
 
@@ -50,9 +50,14 @@ If the program reports `VNA:ConfigurationNotFound`, check that `src/config_VNA.j
 
 If you use this software in research, please cite:
 
-A. Sari et al., “Interlaboratory mmWave and THz Quasi-Optical Characterization of Commercial Conventional and 3-D Printable Substrates,” *IEEE Transactions on Terahertz Science and Technology*, 2026 (under review).
+A. Sari et al., “Interlaboratory mmWave and THz Quasi-Optical Characterization of Commercial Conventional and 3-D Printable Substrates,” *IEEE Transactions on Terahertz Science and Technology*, vol. 16, no. 6, pp. 737–749, 2026. [DOI: 10.1109/TTHZ.2026.3674230](https://doi.org/10.1109/TTHZ.2026.3674230).
 
 ## Author
 
-Alperen Sari — University of Birmingham
+**Alperen Sari — PhD Candidate, University of Birmingham**
+
 GitHub: [@alperensar](https://github.com/alperensar)
+
+Email: [alperensari09@gmail.com](mailto:alperensari09@gmail.com)
+
+Feedback, issue reports and suggestions are welcome. Please open a GitHub issue or contact the author by email.
